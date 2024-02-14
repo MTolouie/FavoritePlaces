@@ -16,11 +16,15 @@ function ImagePicker() {
     useCameraPermissions();
 
   async function verifyPermissions() {
-    if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED || cameraPermissionInformation.canAskAgain) {
+    if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
       const permissionResponse = await requestPermission();
       return permissionResponse.granted;
     }
 
+    if (cameraPermissionInformation.canAskAgain) {
+      const permissionResponse = await requestPermission();
+      return permissionResponse.granted;
+    }
 
     if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
       Alert.alert(
