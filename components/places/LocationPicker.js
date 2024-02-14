@@ -1,4 +1,4 @@
-import { View, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Text, Alert } from "react-native";
 import OutlinedButton from "../UI/OutlinedButton";
 import { Colors } from "../../constants/colors";
 import {
@@ -6,9 +6,11 @@ import {
   useForegroundPermissions,
   PermissionStatus,
 } from "expo-location";
+import { useState } from "react";
 const LocationPicker = () => {
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
+  const [pickedLocation, setPickedLocation] = useState();
 
   const verifyPermission = async () => {
     if (
@@ -30,7 +32,7 @@ const LocationPicker = () => {
     return true;
   };
 
-  const pickOnMapHandler = () => {};
+  //   const pickOnMapHandler = () => {};
   const getLocationHandler = async () => {
     const hasPermission = await verifyPermission();
 
@@ -39,18 +41,33 @@ const LocationPicker = () => {
     }
 
     const location = await getCurrentPositionAsync();
-    console.log(location);
+
+    setPickedLocation({
+      lat: location.coords.latitude,
+      lng: location.coords.longitude,
+    });
   };
+
+  let locationContent = <Text>No Location Picked</Text>;
+
+  if (pickedLocation) {
+    locationContent = (
+      <Text>
+        Lat:{pickedLocation.lat} | lng:{pickedLocation.lng}
+      </Text>
+    );
+  }
+
   return (
     <View>
-      <View style={styles.mapPreview}></View>
+      <View style={styles.mapPreview}>{locationContent}</View>
       <View style={styles.actions}>
         <OutlinedButton icon={"location"} onPress={getLocationHandler}>
-          Locate user
+          Locate User
         </OutlinedButton>
-        <OutlinedButton icon={"map"} onPress={pickOnMapHandler}>
+        {/* <OutlinedButton icon={"map"} onPress={pickOnMapHandler}>
           Pick On Mapp
-        </OutlinedButton>
+        </OutlinedButton> */}
       </View>
     </View>
   );
@@ -69,8 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   actions: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
+    flex: 1,
+    width: "100%",
   },
 });
