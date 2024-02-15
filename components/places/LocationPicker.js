@@ -7,7 +7,8 @@ import {
   PermissionStatus,
 } from "expo-location";
 import { useState } from "react";
-const LocationPicker = () => {
+import { getReadableAddress } from "../../util/location";
+const LocationPicker = ({ onPickLocation }) => {
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
   const [pickedLocation, setPickedLocation] = useState();
@@ -45,6 +46,16 @@ const LocationPicker = () => {
     setPickedLocation({
       lat: location.coords.latitude,
       lng: location.coords.longitude,
+    });
+
+    const address = await getReadableAddress(
+      location.coords.latitude,
+      location.coords.longitude
+    );
+    onPickLocation({
+      lat: location.coords.latitude,
+      lng: location.coords.longitude,
+      address: address,
     });
   };
 

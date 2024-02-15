@@ -3,13 +3,29 @@ import { useState } from "react";
 import { Colors } from "../../constants/colors";
 import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
-function PlaceForm() {
+import Button from "../UI/Button";
+import { place } from "../../models/place";
+
+function PlaceForm({onSubmit}) {
   const [enteredTitle, setEnteredTitle] = useState("");
+  const [takenImage, setTakenImage] = useState("");
+  const [enteredLocation, setEnteredLocation] = useState();
 
   const changeTitleHandler = (enteredText) => {
     setEnteredTitle(enteredText);
   };
 
+  const takeImageHandler = (takneImage) => {
+    setTakenImage(takneImage);
+  };
+  const pickLocationHandler = (enteredLocation) => {
+    setEnteredLocation(enteredLocation);
+  };
+  const savePlaceHandler = () => {
+    const placeData = new place(enteredTitle, takenImage, enteredLocation);
+    console.log(placeData);
+    onSubmit(placeData);
+  };
   return (
     <ScrollView style={styles.form}>
       <View>
@@ -20,8 +36,9 @@ function PlaceForm() {
           value={enteredTitle}
         />
       </View>
-      <ImagePicker />
-      <LocationPicker />
+      <ImagePicker onTakeImage={takeImageHandler} />
+      <LocationPicker onPickLocation={pickLocationHandler} />
+      <Button onPress={savePlaceHandler}>Add Place</Button>
     </ScrollView>
   );
 }
