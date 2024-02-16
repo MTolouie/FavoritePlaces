@@ -39,9 +39,9 @@ function PlaceDetails({ route, navigation }) {
         <View style={styles.addressContainer}>
           <Text style={styles.address}>{fetchedPlace.address}</Text>
         </View>
-        <OutlinedButton icon="map" onPress={showOnMapHandler}>
+        {/* <OutlinedButton icon="map" onPress={showOnMapHandler}>
           View on Map
-        </OutlinedButton>
+        </OutlinedButton> */}
       </View>
     </ScrollView>
   );
